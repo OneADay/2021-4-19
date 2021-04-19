@@ -47,22 +47,22 @@ export default class P5Renderer implements BaseRenderer{
 
         this.colors = [s.color(0, 155, 100), s.color(255, 155, 155), s.color(0, 0, 155)];
 
-        s.noLoop();
+        //s.noLoop();
         s.background(0, 0, 0, 255);
     }
 
     protected draw(s) {
-        s.rotate(s.radians(-20));
-        s.translate(-s.width + 400, 10);
-
         if (this.animating) {
-            this.drawShape(s, s.color(100, 200, 225), s.height, s.height);
-            this.drawShape(s, s.color(100, 10, 100), s.height / 1.5, s.height/ 2);
-            this.drawShape(s, s.color(150, 20, 255), s.height / 2, s.height/ 2);
-            this.drawShape(s, s.color(100, 10, 225), s.height / 2.5, s.height/ 2.5);
-            this.drawShape(s, s.color(150, 10, 225), s.height / 4, s.height/ 4);
-            this.drawShape(s, s.color(200, 10, 225), s.height / 5, s.height/ 5);
-            this.drawShape(s, s.color(50, 10, 100), 0, s.height / 2);
+
+            this.delta += 0.05;
+
+            let total = 20;
+            for (let i = 0; i < total; i++) {
+                let y = s.height / i;
+                let height = (s.height / 2) / i;
+                let color = s.lerpColor(this.colors[0], this.colors[2], i / total);
+                this.drawShape(s, color, y, height);
+            }
         }
     }
 
@@ -71,12 +71,12 @@ export default class P5Renderer implements BaseRenderer{
         s.beginShape();
         s.noStroke();
         s.fill(color);
-        var xoff=s.random() * 100;
+        var xoff = posy + this.delta + 100;
 
         for(var x=0; x<s.width + padding; x++){
           var y = posy + s.noise(xoff) * height;
           s.vertex(x,y)
-          xoff+=0.005
+          xoff += 0.005
         }
         
         s.vertex(s.width + padding, s.noise(xoff) * height);
